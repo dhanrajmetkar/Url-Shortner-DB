@@ -25,33 +25,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class UrlController {
 
     @Autowired
-    private UrlService userService;
-
-    @PostMapping("/add")
-    public ResponseEntity<Url> postMethodName(@RequestBody Url url) {
-  
-            return ResponseEntity.ok().body(userService.addUser(url));
-    }
-
+    private UrlService urlService;
     @Autowired
-    private UrlServiceImpl urlService;
+    private UrlServiceImpl urlServiceimpl;
 
-      @GetMapping("/getCount")
-      public ResponseEntity<Object> getcount()
-      {
-          List<Map.Entry<String, Integer>>list =urlService.getcount();
-          if(list.isEmpty())
-              return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-          return
-                  ResponseEntity.of(Optional.of(list));
-
-      }
 
       @GetMapping("/{key}")
-
-        public RedirectView getUrl(@PathVariable("key") String key)
+      public RedirectView getUrl(@PathVariable("key") String key)
       {
-          Url temp= urlService.getUrl(key);
+          Url temp= urlServiceimpl.getUrl(key);
           String url= temp.getUrlString();
           RedirectView redirectView=new RedirectView();
           redirectView.setUrl(url);
@@ -62,12 +44,24 @@ public class UrlController {
         public String shorturl(@RequestBody String url)
         {
             RedirectView redirectView=new RedirectView();
-            Url temp=this.urlService.addurl(url);
+            Url temp=this.urlServiceimpl.addurl(url);
             String key="http://localhost:8080/"+temp.getShorturl();
             redirectView.setUrl(key);
-            userService.addUser(temp);
+            urlService.addUser(temp);
             return key;
         }
-    
+
+
+
+//      @GetMapping("/getCount")
+//      public ResponseEntity<Object> getcount()
+//      {
+//          List<Map.Entry<String, Integer>>list =urlService.getcount();
+//          if(list.isEmpty())
+//              return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+//          return
+//                  ResponseEntity.of(Optional.of(list));
+//
+//      }
     
 }
