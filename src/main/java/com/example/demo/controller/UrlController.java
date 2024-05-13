@@ -36,8 +36,25 @@ public class UrlController {
     public @ResponseBody Iterable<Domain> getd() {
         return urlServiceimpl.getAllDomain();
     }
+    @GetMapping("/getCount")
+    public ResponseEntity<Object> getcount()
+    {
+        List<Map.Entry<String, Integer>>list =urlServiceimpl.getcount();
+        if(list.isEmpty())
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return
+                ResponseEntity.of(Optional.of(list));
 
-
+    }
+    @GetMapping("/{key}")
+    public RedirectView getUrl(@PathVariable("key") String key)
+    {
+        Url temp= urlServiceimpl.getUrl(key);
+        String url= temp.getUrl();
+        RedirectView redirectView=new RedirectView();
+        redirectView.setUrl(url);
+        return redirectView;
+    }
     @PostMapping("/shortUrl")
         public String shorturl(@RequestBody String url)
         {

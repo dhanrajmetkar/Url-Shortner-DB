@@ -3,7 +3,8 @@ package com.example.demo.service;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.*;
 import java.util.UUID;
 
 import com.example.demo.entity.Domain;
@@ -55,5 +56,27 @@ public class UrlServiceImpl implements UrlService,DomainService {
             Url url1 = new Url(uuid.toString().substring(0, 4), urlstring);
                 return url1;
         }
+        public List<Map.Entry<String, Integer>> getcount()
+        {
+            Map<String,Integer> mp = new HashMap<>();
+            for (Domain dom : domainRepository.findAll()) {
+                mp.put(dom.getDomainName(), dom.getCount());
+            }
+            List<Map.Entry<String, Integer>> list = new ArrayList<>(mp.entrySet());
 
+            //Using Entry's comparingByValue() method for sorting in ascending order
+            list.sort(Map.Entry.comparingByValue());
+            Collections.reverse(list);
+            if(list.size()<=3)
+                return list;
+            List<Map.Entry<String, Integer>> firstThreeElements = new ArrayList<>();
+            for (int i = 0; i < 3; i++) {
+                firstThreeElements.add(list.get(i));
+            }
+            return firstThreeElements;
+        }
+
+    public Url getUrl(String shorturl) {
+        return  urlRepository.findByShorturl(shorturl);
+    }
 }
