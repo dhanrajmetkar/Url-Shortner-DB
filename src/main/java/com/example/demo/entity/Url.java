@@ -19,14 +19,17 @@ public class Url {
     private Integer id;
     private String shorturl;
     private String url;
-    private Integer count;
 
-    public Url(String shorturl, String url, int count) {
+    public Url(String shorturl, String url) {
         this.shorturl=shorturl;
         this.url=url;
-        this.count=count;
+
     }
-    public String getUrlString() {
-       return shorturl;
+    public String url() {
+       return url;
+    }
+
+    public String getShorturl() {
+        return shorturl;
     }
 }

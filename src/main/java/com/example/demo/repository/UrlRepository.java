@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository;
 
 import com.example.demo.entity.Url;
 @Repository
-public interface UrlRepository extends JpaRepository<Url,Long> {
+public interface UrlRepository extends JpaRepository<Url,Integer> {
     
 }

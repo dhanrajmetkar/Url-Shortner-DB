@@ -3,10 +3,7 @@ package com.example.demo.service;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import com.example.demo.entity.Domain;
@@ -17,78 +14,46 @@ import org.springframework.stereotype.Service;
 import com.example.demo.entity.Url;
 
 @Service
-public class UrlServiceImpl implements UrlService {
+public class UrlServiceImpl implements UrlService,DomainService {
+   @Autowired
+    UrlRepository urlRepository;
+   @Autowired
+           DomainRepository domainRepository;
 
-    @Autowired
-    private UrlRepository urlRepository;
+    List<Url> urls=new ArrayList<>();
+    List<Domain> domains=new ArrayList<>();
 
-    @Autowired
-    private DomainRepository domainRepository;
-
-    public Url addUser(Url user) {
-        return urlRepository.save(user);
+    public Url addUrlDb(Url url) {
+        return urlRepository.save(url);
+    }
+    public Domain addDomainDb(Domain domain) {
+        return domainRepository.save(domain);
     }
 
-    private List<Domain> mp= domainRepository.findAll();
-    List<Url> li=urlRepository.findAll();
-
-        public Url getUrl(String key)
-        {
-
-            Url url=null;
-            url= li.stream().filter(i->i.getShorturl().equals(key)).findFirst().get();
-            url.setCount(url.getCount()+1);
-            return url;
+    public List<Url> getAllUrl() {
+        for (Url url : urlRepository.findAll()) {
+            urls.add(url);
         }
+        return urls;
+    }
+    public List<Domain> getAllDomain() {
+        for (Domain domain : domainRepository.findAll()) {
+            domains.add(domain);
+        }
+        return domains;
+    }
 
-
-        public Url addurl(String url) {
+    public Url addUrl(String urlstring) {
             UUID uuid = UUID.randomUUID();
-
-            for (Url url1 : li) {
-                String temp=url1.getUrlString();
-                if(temp.equals(url))
+        for (Url url : urlRepository.findAll()) {
+            String temp=url.getUrl();
+            if(temp.equals(urlstring))
                 {
-                    return url1;
+                    return url;
                 }
-            }
-
-            URL ur;
-            try {
-                ur = new URL(url);
-            } catch (MalformedURLException e) {
-                throw new RuntimeException(e);
-            }
-
-//                if(domainRepository.findOne(ur.getHost()))
-//                {
-//              domainRepository.save(
-//                }
-//                else {
-//                    mp.put(ur.getHost(),mp.get(ur.getHost())+1);
-//                }
-
-                Url url1 = new Url(uuid.toString().substring(0, 4), url, 1);
+        }
+            Url url1 = new Url(uuid.toString().substring(0, 4), urlstring);
                 return url1;
-
         }
 
-//        public List<Map.Entry<String, Integer>> getcount()
-//        {
-//
-//
-//            List<Map.Entry<String, Integer>> list = new ArrayList<>(mp.entrySet());
-//
-//            //Using Entry's comparingByValue() method for sorting in ascending order
-//            list.sort(Map.Entry.comparingByValue());
-//            Collections.reverse(list);
-//            if(list.size()<=3)
-//                return list;
-//            List<Map.Entry<String, Integer>> firstThreeElements = new ArrayList<>();
-//            for (int i = 0; i < 3; i++) {
-//                firstThreeElements.add(list.get(i));
-//            }
-//            return firstThreeElements;
-//
-//
 }
