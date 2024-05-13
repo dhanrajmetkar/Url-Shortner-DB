@@ -61,34 +61,34 @@ public class UrlController {
             Url temp=this.urlServiceimpl.addUrl(url);
             String key="http://localhost:8080/"+temp.getShorturl();
             redirectView.setUrl(key);
-            URL ur;
-            try {
-                ur = new URL(url);
-            } catch (MalformedURLException e) {
-                throw new RuntimeException(e);
-            }
-            String domain=ur.getHost();
-            Domain domainobj=new Domain();
-            int id;
-            boolean flag=true;
-            List<Domain> domains = urlServiceimpl.getAllDomain();
-            if(domains.size()>0) {
-                for (Domain domain1 : domains) {
-                    String d1 = domain1.getDomainName();
-                    if (domain.equals(d1)) {
-                        int n = domain1.getCount();
-                        domain1.setCount(n + 1);
-                        flag=false;
-                        urlServiceimpl.addDomainDb(domain1);
-                    }
-                }
-            }
-            domainobj.setDomainName(domain);
-            domainobj.setCount(1);
-
-            urlService.addUrlDb(temp);
-            if(flag)
-            urlServiceimpl.addDomainDb(domainobj);
+//            URL ur;
+//            try {
+//                ur = new URL(url);
+//            } catch (MalformedURLException e) {
+//                throw new RuntimeException(e);
+//            }
+//            String domain=ur.getHost();
+//            Domain domainobj=new Domain();
+//            int id;
+//            boolean flag=true;
+//            List<Domain> domains = urlServiceimpl.getAllDomain();
+//            if(domains.size()>0) {
+//                for (Domain domain1 : domains) {
+//                    String d1 = domain1.getDomainName();
+//                    if (domain.equals(d1)) {
+//                        int n = domain1.getCount();
+//                        domain1.setCount(n + 1);
+//                        flag=false;
+//                        urlServiceimpl.addDomainDb(domain1);
+//                    }
+//                }
+//            }
+//            domainobj.setDomainName(domain);
+//            domainobj.setCount(1);
+//
+              urlService.addUrlDb(temp);
+//            if(flag)
+//            urlServiceimpl.addDomainDb(domainobj);
             return key;
         }
 }

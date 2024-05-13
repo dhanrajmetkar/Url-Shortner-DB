@@ -52,9 +52,35 @@ public class UrlServiceImpl implements UrlService,DomainService {
                 {
                     return url;
                 }
+         }
+        URL ur;
+        try {
+            ur = new URL(urlstring);
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
         }
-            Url url1 = new Url(uuid.toString().substring(0, 4), urlstring);
-                return url1;
+        String domain=ur.getHost();
+        Domain domainobj=new Domain();
+        int id;
+        boolean flag=true;
+        List<Domain> domains = domainRepository.findAll();
+        if(domains.size()>0) {
+            for (Domain domain1 : domains) {
+                String d1 = domain1.getDomainName();
+                if (domain.equals(d1)) {
+                    int n = domain1.getCount();
+                    domain1.setCount(n + 1);
+                    flag=false;
+                    addDomainDb(domain1);
+                }
+            }
+        }
+        domainobj.setDomainName(domain);
+        domainobj.setCount(1);
+        if(flag)
+         addDomainDb(domainobj);
+        Url url1 = new Url(uuid.toString().substring(0, 4), urlstring);
+            return url1;
         }
         public List<Map.Entry<String, Integer>> getcount()
         {
@@ -63,7 +89,6 @@ public class UrlServiceImpl implements UrlService,DomainService {
                 mp.put(dom.getDomainName(), dom.getCount());
             }
             List<Map.Entry<String, Integer>> list = new ArrayList<>(mp.entrySet());
-
             //Using Entry's comparingByValue() method for sorting in ascending order
             list.sort(Map.Entry.comparingByValue());
             Collections.reverse(list);
